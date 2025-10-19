@@ -1,10 +1,10 @@
 ---
-- name: Установка SIPp из исходников
+- name: Installing SIPp from source
   hosts: localhost
   become: yes
   tasks:
 
-    - name: Установить необходимые зависимости
+    - name: Install required dependencies
       apt:
         name:
           - cmake
@@ -16,34 +16,34 @@
         state: present
         update_cache: yes
 
-    - name: Убедиться, что каталог /usr/local/src существует
+    - name: Make sure the /usr/local/src directory exists
       file:
         path: /usr/local/src
         state: directory
 
-    - name: Скачать архив SIPp 3.7.5
+    - name: Download the SIPp 3.7.5 (check valid url)
       get_url:
         url: https://github.com/SIPp/sipp/releases/download/v3.7.5/sipp-3.7.5.tar.gz
         dest: /usr/local/src/sipp-3.7.5.tar.gz
         mode: '0644'
 
-    - name: Распаковать архив SIPp
+    - name: Unzip the SIPp archive
       unarchive:
         src: /usr/local/src/sipp-3.7.5.tar.gz
         dest: /usr/local/src/
         remote_src: yes
 
-    - name: Выполнить cmake в каталоге sipp-3.7.5
+    - name: Run compilation SIPp step 1
       command: cmake .
       args:
         chdir: /usr/local/src/sipp-3.7.5
 
-    - name: Скомпилировать SIPp
+    - name: Rum compolation SIPp step 2
       command: make
       args:
         chdir: /usr/local/src/sipp-3.7.5
 
-    - name: Установить SIPp
+    - name: Install SIPp
       command: make install
       args:
         chdir: /usr/local/src/sipp-3.7.5
